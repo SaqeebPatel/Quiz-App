@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz App</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<style>
+    .message {
+      margin-top: 10px;
+    }
+
+    body {
+      background-image: url('./pic/1.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.8); 
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Quiz App</h1>
+    <div id="quiz-container">
+      <div class="card my-3" id="question-card">
+        <div class="card-body">
+          <h5 class="card-title" id="question-title"></h5>
+          <div id="options-container"></div>
+        </div>
+      </div>
+    </div>
+    <div id="result-container" class="d-none">
+      <h2 class="text-center">Your Score:</h2>
+      <p id="score" class="text-center"></p>
+    </div>
+    <div id="submit-container" class="text-center">
+      <button id="submit-btn" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "  How can we describe an array in the best possible way?",
+        options: ["The Array shows a hierarchical structure.", "Arrays are immutable.", 
+        "Container that stores the elements of similar types", "The Array is not a data structure"],
+        answer: "Container that stores the elements of similar types"
+      },
+      {
+        question: " Which of the following is the correct way of declaring an array?",
+        options: ["int javatpoint[10];", "int javatpoint;", "javatpoint{20};", "array javatpoint[10];"],
+        answer: "int javatpoint[10];"
+      },
+      {
+        question: " How can we initialize an array in C language?",
+        options: ["int arr[2]=(10, 20)", "int arr(2)={10, 20}", "int arr[2] = {10, 20}", "int arr(2) = (10, 20)"],
+        answer: "int arr[2] = {10, 20}"
+      },
+      {
+        question: " Which of the following is the advantage of the array data structure?",
+        options: ["Elements of mixed data types can be stored.", 
+        "Easier to access the elements in an array", 
+        "Index of the first element starts from 1.", 
+        "Elements of an array cannot be sorted"],
+        answer: "Easier to access the elements in an array"
+      },
+      {
+        question: " Which of the following highly uses the concept of an array?",
+        options: ["Binary Search tree", "Caching", "Spatial locality", "Scheduling of Processes"],
+        answer: "Spatial locality"
+      },
+      {
+        question: " Which of the following is the disadvantage of the array?",
+        options: ["Stack and Queue data structures can be implemented through an array.",
+         "Index of the first element in an array can be negative", 
+         "Wastage of memory if the elements inserted in an array are lesser than the allocated size", 
+         "Elements can be accessed sequentially."],
+        answer: "Wastage of memory if the elements inserted in an array are lesser than the allocated size"
+      }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+    const questionCard = document.getElementById('question-card');
+    const questionTitle = document.getElementById('question-title');
+    const optionsContainer = document.getElementById('options-container');
+    const resultContainer = document.getElementById('result-container');
+    const scoreDisplay = document.getElementById('score');
+    const submitButton = document.getElementById('submit-btn');
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    function displayQuestion() {
+      const currentQuestion = questions[currentQuestionIndex];
+      questionTitle.textContent = `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
+      const optionsHtml = currentQuestion.options.map(option => `
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="options" value="${option}">
+          <label class="form-check-label">${option}</label>
+        </div>
+      `).join('');
+      optionsContainer.innerHTML = optionsHtml;
+    }
+
+    function calculateScore() {
+      const selectedOption = document.querySelector('input[name="options"]:checked').value;
+      if (selectedOption === questions[currentQuestionIndex].answer) {
+        score++;
+      }
+    }
+
+    function showNextQuestion() {
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        displayQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      calculateScore();
+      scoreDisplay.textContent = `${score} out of ${questions.length}`;
+      resultContainer.classList.remove('d-none');
+      quizContainer.classList.add('d-none');
+      submitButton.classList.add('d-none');
+    }
+
+    submitButton.addEventListener('click', () => {
+      calculateScore();
+      showNextQuestion();
+    });
+
+    displayQuestion();
+  </script>
+</body>
+</html>
